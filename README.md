@@ -9,9 +9,9 @@ TODO:<br />
 	○ Automate Category<br />
  	○ Add User Input<br />
 	○ Add File Selection<br />
- 	○ Cleanup Code<br />
+   	○ Add GUI<br />
+    
 <br />
 TODO?:<br />
  	○ Add Schedule<br />
- 	○ Add GUI<br />
  	○ Add Duplicate Detection
