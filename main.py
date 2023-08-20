@@ -6,7 +6,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, NoSuchElementException  
+from selenium.webdriver.chrome.options import Options
 
+chrome_options = Options()
+#chrome_options.add_argument("--headless")  # This line enables headless mode
+
+driver = webdriver.Chrome(options=chrome_options)
 
 def main():
     # Replace these with your CSV file path, columns to copy, webdriver path, and website URL
@@ -17,8 +22,8 @@ def main():
     login_url = 'https://id.ramseysolutions.com/login'
 
     # Replace with your login credentials
-    username = 'username'
-    password = 'password'
+    username = ""
+    password = ""
 
     data_to_fill = read_csv_and_get_columns(csv_file, columns_to_copy)
     driver = setup_webdriver(webdriver_path, website_url)
