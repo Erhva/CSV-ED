@@ -1,7 +1,9 @@
 import sys
+import os
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QFileDialog
 from PyQt5.QtCore import Qt, QMimeData
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent
+from PyQt5 import QtGui, QtCore
 
 class MyWindow(QMainWindow):
     def __init__(self):
