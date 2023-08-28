@@ -34,6 +34,7 @@ def main():
 
 def read_csv_and_get_columns(csv_file, columns_to_copy):
     df = pd.read_csv(csv_file)
+    df['Amount'] = pd.to_numeric(df['Amount'], errors='coerce')
     selected_columns = df[columns_to_copy]
     return selected_columns
 
@@ -90,7 +91,6 @@ def login(driver, login_url, username, password):
 
     except TimeoutException:
         print("Login failed. URL did not change. Please check your login credentials.")
-        # You can choose to raise an exception here or take any other appropriate action. 
     
     # Wait for successful login
     WebDriverWait(driver, 10).until(EC.url_changes(login_url))
