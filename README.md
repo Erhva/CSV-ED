@@ -5,8 +5,8 @@ Currently takes csv file and loops through each row and enters in the new transa
 Automates login and opens new transaction. Enters in Amount, Date, and Description.<br />
 <br />
 TODO:<br />
-	☑ Automate Category<br />
- 	☐ Add Income Transactions<br />
+	☑ Add Income Transactions<br />
+ 	☐ Automate Categories<br />
  	☐ Add User Input<br />
 	☐ Add File Selection<br />
    	☐ Add GUI<br />
