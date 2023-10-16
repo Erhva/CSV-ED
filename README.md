@@ -5,13 +5,13 @@ Currently takes csv file and loops through each row and enters in the new transa
 Automates login and opens new transaction. Enters in Amount, Date, and Description.<br />
 <br />
 TODO:<br />
- 	○ Add Income Transactions<br />
-	○ Automate Category<br />
- 	○ Add User Input<br />
-	○ Add File Selection<br />
-   	○ Add GUI<br />
+	☑ Automate Category<br />
+ 	☐ Add Income Transactions<br />
+ 	☐ Add User Input<br />
+	☐ Add File Selection<br />
+   	☐ Add GUI<br />
     
 <br />
 TODO?:<br />
- 	○ Add Schedule<br />
- 	○ Add Duplicate Detection
+ 	☐ Add Schedule<br />
+ 	☐ Add Duplicate Detection
