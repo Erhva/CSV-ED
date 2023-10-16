@@ -8,16 +8,11 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, NoSuchElementException  
 from selenium.webdriver.chrome.options import Options
 
-chrome_options = Options()
-#chrome_options.add_argument("--headless")  # This line enables headless mode
-
-driver = webdriver.Chrome(options=chrome_options)
-
 def main():
     # Replace these with your CSV file path, columns to copy, webdriver path, and website URL
-    csv_file = 'Statement.csv' #Change to your csv file, store in same directory
+    csv_file = 'ExportedTransactions.csv' #Change to your csv file, store in same directory
     columns_to_copy = ['Amount', 'Posting Date', 'Description'] #Change depending on CSV format
-    webdriver_path = 'C:\Program Files (x86)\chromedriver-win64\chromedriver.exe' #Change this to your webdriver path
+    webdriver_path = r"C:\Users\Eric\AppData\Local\Google\Chrome\Application\chrome-win64\chrome.exe" #Change this to your webdriver path
     website_url = 'https://www.everydollar.com/app/budget/transaction/new'
     login_url = 'https://id.ramseysolutions.com/login'
 
@@ -30,7 +25,7 @@ def main():
 
     login(driver, login_url, username, password)
     fill_web_form(driver, website_url, data_to_fill)
-    time.sleep(1)    
+    time.sleep(1)
 
 def read_csv_and_get_columns(csv_file, columns_to_copy):
     df = pd.read_csv(csv_file)
@@ -58,12 +53,13 @@ def fill_web_form(driver, website_url, data_to_fill):
         driver.get(website_url)
         WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'input[name="amount"]')))
         for i, column_value in enumerate(row):
+            if isinstance(column_value, (int, float)) and column_value > 0:
+                WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'div[class="rds-Radio TransactionForm-typeOption TransactionForm-typeOption--income"]')))
+                income_click = driver.find_element(By.CSS_SELECTOR, 'div[class="rds-Radio TransactionForm-typeOption TransactionForm-typeOption--income"]').click()     
+            else: None
             input_element = driver.find_element(By.CSS_SELECTOR, input_selectors[i])
             input_element.clear()  # Clear any previous data in the input field
             input_element.send_keys(str(column_value))
-            # Add delay (if needed) to avoid overwhelming the server
-            # time.sleep(1)
-            # You can also submit the form after filling each row (if desired)
         submit_button = driver.find_element(By.CSS_SELECTOR, 'button[id="TransactionModal_submit"][type="submit"]').click()
         time.sleep(1)
 
