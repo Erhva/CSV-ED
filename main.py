@@ -7,18 +7,19 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, NoSuchElementException  
 from selenium.webdriver.chrome.options import Options
+import gui
 
 def main():
     # Replace these with your CSV file path, columns to copy, webdriver path, and website URL
     csv_file = 'ExportedTransactions.csv' #Change to your csv file, store in same directory
     columns_to_copy = ['Amount', 'Posting Date', 'Description'] #Change depending on CSV format
-    webdriver_path = r"C:\Users\Eric\AppData\Local\Google\Chrome\Application\chrome-win64\chrome.exe" #Change this to your webdriver path
+    webdriver_path = r"C:\Users\ehall\AppData\Local\Google\Chrome\chrome-win64\chrome.exe" #Change this to your webdriver path
     website_url = 'https://www.everydollar.com/app/budget/transaction/new'
     login_url = 'https://id.ramseysolutions.com/login'
 
     # Replace with your login credentials
-    username = ""
-    password = ""
+    username = gui.username
+    password = gui.password
 
     data_to_fill = read_csv_and_get_columns(csv_file, columns_to_copy)
     driver = setup_webdriver(webdriver_path, website_url)
