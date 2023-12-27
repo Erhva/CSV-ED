@@ -1,77 +1,79 @@
-import sys
-import os
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QFileDialog
-from PyQt5.QtCore import Qt, QMimeData
-from PyQt5.QtGui import QDragEnterEvent, QDropEvent
-from PyQt5 import QtGui, QtCore
+import tkinter as tk
+from tkinter import filedialog
+import pandas as pd
+from pandastable import Table, TableModel
 
-class MyWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
+def show_login_frame():
+    frame_login.pack()
 
-        self.setWindowTitle("CSV Editor")
-        self.setGeometry(100, 100, 400, 300)
+def show_csv_select_frame():
+    frame_login.pack_forget()  # Hide the login frame
+    frame_csv_select.pack()    # Show the CSV select frame
 
-        layout = QVBoxLayout()
+def show_csv_preview_frame(file_path):
+    frame_csv_select.pack_forget()  # Hide the CSV select frame
+    frame_csv_preview.pack()        # Show the CSV preview frame
 
-        self.username_label = QLabel("Username:")
-        self.username_input = QLineEdit()
+    df = pd.read_csv(file_path)
+    # Display the first few rows of the CSV file in a PandasTable
+    table = Table(frame_csv_preview, dataframe=df.head())
+    table.show()
 
-        self.password_label = QLabel("Password:")
-        self.password_input = QLineEdit()
-        self.password_input.setEchoMode(QLineEdit.Password)
+def on_submit():
+    username = username_entry.get()
+    password = password_entry.get()
 
-        self.file_label = QLabel("Drag and Drop CSV File Here")
-        self.file_label.setAlignment(Qt.AlignCenter)
-        self.file_label.setAcceptDrops(True)
-        self.file_label.setFixedSize(300, 100)  # Set the fixed size here
-        
-        self.select_button = QPushButton("Select File")
-        self.select_button.clicked.connect(self.open_file_dialog)
+    if username and password:
+        show_csv_select_frame()
 
-        self.submit_button = QPushButton("Submit")
-        self.submit_button.clicked.connect(self.on_submit)
+def on_browse():
+    file_path = filedialog.askopenfilename(title="Select CSV File", filetypes=[("CSV Files", "*.csv")])
+    if file_path:
+        file_label.config(text="File Selected: " + file_path)
+        submit_button_csv.pack()  # Show the Submit button for CSV after selecting the file
 
-        layout.addWidget(self.username_label)
-        layout.addWidget(self.username_input)
-        layout.addWidget(self.password_label)
-        layout.addWidget(self.password_input)
-        layout.addWidget(self.file_label)
-        layout.addWidget(self.select_button)
-        layout.addWidget(self.submit_button)
+def on_submit_csv():
+    file_path = file_label.cget("text")[15:]  # Extracting file path from label text
+    if file_path:
+        show_csv_preview_frame(file_path)
 
-        central_widget = QWidget()
-        central_widget.setLayout(layout)
-        self.setCentralWidget(central_widget)
+# GUI setup
+root = tk.Tk()
+root.title("CSV Uploader")
 
-    def on_submit(self):
-        username = self.username_input.text()
-        password = self.password_input.text()
-        file_path = self.file_label.text()
-        print("Username:", username)
-        print("Password:", password)
-        print("File Path:", file_path)
+# Login Frame
+frame_login = tk.Frame(root)
 
-    def dragEnterEvent(self, event):
-        if event.mimeData().hasUrls():
-            event.acceptProposedAction()
+# Username Entry
+tk.Label(frame_login, text="Username:").pack()
+username_entry = tk.Entry(frame_login)
+username_entry.pack()
 
-    def dropEvent(self, event):
-        mime_data = event.mimeData()
-        if mime_data.hasUrls():
-            for url in mime_data.urls():
-                file_path = url.toLocalFile()
-                self.file_label.setText("File Selected: " + file_path)
-                event.acceptProposedAction()
+# Password Entry
+tk.Label(frame_login, text="Password:").pack()
+password_entry = tk.Entry(frame_login, show="*")
+password_entry.pack()
 
-    def open_file_dialog(self):
-        options = QFileDialog.Options()
-        file_path, _ = QFileDialog.getOpenFileName(self, "Select CSV File", "", "CSV Files (*.csv);;All Files (*)", options=options)
-        if file_path:
-            self.file_label.setText("File Selected: " + file_path)
-        
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MyWindow()
-    window.show()
-    sys.exit(app.exec_())
+# Submit Button
+submit_button = tk.Button(frame_login, text="Submit", command=on_submit)
+submit_button.pack()
+
+# CSV Select Frame
+frame_csv_select = tk.Frame(root)
+
+# File Label
+file_label = tk.Label(frame_csv_select, text="No file selected")
+file_label.pack()
+
+# Browse Button
+browse_button = tk.Button(frame_csv_select, text="Browse CSV", command=on_browse)
+browse_button.pack()
+
+# Submit Button for CSV
+submit_button_csv = tk.Button(frame_csv_select, text="Submit", command=on_submit_csv)
+
+# Frame for CSV preview
+frame_csv_preview = tk.Frame(root)
+
+show_login_frame()
+root.mainloop()
